@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgres123@127.0.0.1:5432/db_Agendamento_Reuniao"//env("DATABASE_URL")
+}
+
+model contacto {
+  fk_usuario Int 
+  numero     String  @id
+  usuario    usuario @relation(fields: [fk_usuario], references: [pk_usuario], map: "contacto_contactoId_fkey")
+}
+
+model departamento {
+  pk_departamento Int   @id @default(autoincrement())
+  nome            String
+  funcao          funcao[]
+}
+
+model edificio {
+  pk_edificio Int @id @default(autoincrement())
+  nome        String
+  sala        sala[]
+}
+
+model funcao {
+  pk_funcao       Int       @id @default(autoincrement())
+  nome            String
+  fk_departamento Int
+  departamento    departamento @relation(fields: [fk_departamento], references: [pk_departamento], map: "funcao_departamentoId_fkey")
+  usuario         usuario[]
+}
+
+model participante {
+  fk_usuario Int
+  fk_reuniao Int
+  reuniao    reuniao @relation(fields: [fk_reuniao], references: [pk_reuniao], map: "participante_reuniaoId_fkey")
+  usuario    usuario @relation(fields: [fk_usuario], references: [pk_usuario], map: "participante_userId_fkey")
+
+  @@id([fk_usuario, fk_reuniao])
+}
+
+model prioridade_reuniao {
+  pk_prioridade Int    @id @default(autoincrement())
+  descricao     String
+  reuniao       reuniao[]
+}
+
+model reuniao {
+  pk_reuniao         Int             @id @default(autoincrement())
+  title              String
+  duracao            String
+  date_realizacao    DateTime
+  tempo_inicio       DateTime
+  tempo_final        DateTime
+  estado_reuniao     estado_reuniao     @default(ESPERA)
+  fk_prioridade      Int
+  prioridade_reuniao prioridade_reuniao @relation(fields: [fk_prioridade], references: [pk_prioridade], map: "reuniao_prioridadeId_fkey")
+  participante       participante[]
+}
+
+model sala {
+  pk_sala     Int   @id @default(autoincrement())
+  fk_edificio Int
+  piso        String
+  nome        String
+  edificio    edificio @relation(fields: [fk_edificio], references: [pk_edificio], map: "sala_edificio_fkey")
+}
+
+model usuario {
+  pk_usuario   Int         @id @default(autoincrement())
+  email        String         @unique
+  name         String
+  password     String
+  fk_funcao    Int
+  perfil       Perfil         @default(USER)
+  funcao       funcao         @relation(fields: [fk_funcao], references: [pk_funcao])
+  contacto     contacto[]
+  participante participante[]
+}
+
+enum Perfil {
+  USER
+  ADMIN
+}
+
+enum estado_reuniao {
+  APROVADO
+  ESPERA
+  REJEITADO
+}

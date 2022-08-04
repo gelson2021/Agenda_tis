@@ -1,0 +1,34 @@
+ {
+     "funcao": {
+         "nome": "programador",
+         "departamento": {
+             "id": 1,
+             "nome": "Fabrica"
+
+         }
+     },
+
+     "departamento": {
+         "nome": "Infra"
+     },
+
+     "login": {
+         "nome": "gelson",
+         "passwor": "1234"
+     },
+
+     "cadastrar": {
+         "email": "gelson@tg.com",
+         "name": "gelson",
+         "password": "1234",
+         "perfil": "Perfil.ADMIN",
+         "funcao": 1
+     },
+     "alteraPasse": {
+         "pk_usuario": 1,
+         "password": "nova"
+
+     }
+
+
+ }
