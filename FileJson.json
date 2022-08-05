@@ -4,7 +4,6 @@
          "departamento": {
              "id": 1,
              "nome": "Fabrica"
-
          }
      },
 
@@ -14,7 +13,8 @@
 
      "login": {
          "email": "gelson",
-         "passwor": "1234"
+         "password": "1234"
+       
      },
 
      "cadastrar": {
@@ -27,6 +27,18 @@
      "alteraPasse": {
          "pk_usuario": 1,
          "password": "nova"
+        
+     },
+
+     "URL":{
+        "lU":"listarUsuario",
+        "AP":"alteraPasse",
+        "CU":"cadastrarUsuario",
+        "F": "funcao",
+        "LF":"listarFuncao",
+        "D":"departamento",
+        "L":"login",
+        "DOWN":"disconectarBD"
 
      }
 

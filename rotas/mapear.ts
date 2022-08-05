@@ -27,11 +27,13 @@ app.put('/alteraPasse', async (req: any, res: any) => {
 
     try {
         const result = await prisma.usuario.update({
-            where: { pk_usuario: req.body.pk_usuario },
+            where: { pk_usuario: req.body.pk_usuario},
             data: {
                 "password": req.body.password,
             }
         });
+
+        res.send(result)
     } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             // The .code property can be accessed in a type-safe manner
@@ -49,7 +51,7 @@ app.put('/alteraPasse', async (req: any, res: any) => {
 
 
 // post do registrar usuario
-app.post('/cadastrarDados', async (req: any, res: any) => {
+app.post('/cadastrarUsuario', async (req: any, res: any) => {
     console.log("estou dentro");
     console.clear();
 
@@ -61,11 +63,6 @@ app.post('/cadastrarDados', async (req: any, res: any) => {
                 "password": req.body.password,
                 "perfil": req.body.perfil,
                 "funcao": { connect: { pk_funcao: req.body.funcao } }
-                /*"connectOrCreate" :{
-                     where:{ "pk_funcao" : req.body.funcao.id}
-                     , create : {"nome"  :req.body.funcao.nome, departamento: } 
-                    }, 
-                }*/
             }
         });
 
@@ -194,7 +191,7 @@ app.post('/departamento', async (req, res) => {
             }
         });
 
-        res.send(result.toString + " resultado------------------------");
+        res.send(result);
 
     } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -211,6 +208,56 @@ app.post('/departamento', async (req, res) => {
 
 });
 
+// prioridade add
+app.post('/prioridade', async (req, res) => {
+  
+    try {
+        const result = await prisma.prioridade_reuniao.create({
+            data: {
+                descricao: req.body.nome,
+            }
+        });
+
+        res.send(result);
+
+    } catch (e:any) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            // The .code property can be accessed in a type-safe manner
+            if (e.code === 'P2002') {
+                console.log(
+                    'There is a unique constraint violation, a new user cannot be created with this email'
+                )
+            }
+        }
+        throw e
+    }
+
+
+});
+// prioridade listar
+app.post('/listarPrioridade', async (req, res) => {
+  
+    try {
+        const result = await prisma.prioridade_reuniao.findMany({
+            
+        });
+
+        res.send(result);
+
+    } catch (e:any) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            // The .code property can be accessed in a type-safe manner
+            if (e.code === 'P2002') {
+                console.log(
+                    'There is a unique constraint violation, a new user cannot be created with this email'
+                )
+            }
+        }
+        throw e
+    }
+
+
+});
 
 // post do login
 app.post('/login', async (req, res) => {
