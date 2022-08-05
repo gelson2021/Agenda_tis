@@ -40,8 +40,8 @@
         "L":"login",
         "DOWN":"disconectarBD"
 
-     }
-     {
+     },
+     "reunião": {
         "reuniao": {
             "title": "reuniao.title",
             "duracao": 2,
