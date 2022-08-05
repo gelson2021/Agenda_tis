@@ -87,7 +87,7 @@ app.post('/cadastrarUsuario', async (req: any, res: any) => {
 
 
 // post do registrar usuario
-app.post('/cadastrarReunião', async (req: any, res: any) => {
+app.post('/cadastrarReuniao', async (req: any, res: any) => {
     console.log("estou dentro");
     console.clear();
     const { reuniao, participante} = req.body
@@ -101,12 +101,16 @@ app.post('/cadastrarReunião', async (req: any, res: any) => {
                 "tempo_inicio": reuniao.tempo_inicio,
                 "tempo_final": reuniao.tempo_final,
                 "estado_reuniao" : reuniao.estado_reuniao,
-                "prioridade_reuniao" :{ connect: { pk_prioridade: reuniao.pk_prioridade } },
-                "participante": {create : participante}
+                "prioridade_reuniao" :{ connect: { pk_prioridade: reuniao.prioridade_reuniao } },
+                participante: {create: {fk_usuario :participante.fk_usuario }}
             }
         });
+
+        const result1 = await prisma.participante.createMany({
+            data:participante
+        })
         
-        console.log(result);
+        console.log(result,result1);
         res.send(result)
     } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {

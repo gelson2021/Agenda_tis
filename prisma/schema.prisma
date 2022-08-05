@@ -54,7 +54,7 @@ model prioridade_reuniao {
 
 model reuniao {
   pk_reuniao         Int             @id @default(autoincrement())
-  title              String
+  title              String             @unique
   duracao            String
   date_realizacao    DateTime
   tempo_inicio       DateTime
