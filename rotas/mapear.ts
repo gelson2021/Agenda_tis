@@ -1,6 +1,5 @@
 import express from 'express'
 import { Prisma, PrismaClient } from '@prisma/client';
-
 const prisma = new PrismaClient();
 const app = express();
 var bodyParser = require('body-parser')
@@ -101,6 +100,10 @@ app.post('/listarUsuario', async (req: any, res: any) => {
         console.log(result);
         res.send(result)
     } catch (e:any) {
+
+        console.error(prisma);
+        
+        
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             // The .code property can be accessed in a type-safe manner
             if (e.code === 'P2002') {
