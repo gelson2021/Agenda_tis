@@ -102,15 +102,25 @@ app.post('/cadastrarReuniao', async (req: any, res: any) => {
                 "tempo_final": reuniao.tempo_final,
                 "estado_reuniao" : reuniao.estado_reuniao,
                 "prioridade_reuniao" :{ connect: { pk_prioridade: reuniao.prioridade_reuniao } },
-                participante: {create: {fk_usuario :participante.fk_usuario }}
+               
             }
         });
+        if(result != null )
+            console.log(result.pk_reuniao+" e "+participante)
 
-        const result1 = await prisma.participante.createMany({
-            data:participante
-        })
+
+        var resultpasr:any;
+        participante.forEach( async (element:any) => {
+            resultpasr = await prisma.participante.create({
+                data:{ fk_usuario: element.pk_usuario,
+                        fk_reuniao: result.pk_reuniao
+                }
+            })
+        });
+
+       
         
-        console.log(result,result1);
+        console.log(resultpasr);
         res.send(result)
     } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
