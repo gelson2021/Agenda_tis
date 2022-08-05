@@ -84,6 +84,45 @@ app.post('/cadastrarUsuario', async (req: any, res: any) => {
 
 });
 
+
+
+// post do registrar usuario
+app.post('/cadastrarReunião', async (req: any, res: any) => {
+    console.log("estou dentro");
+    console.clear();
+    const { reuniao, participante} = req.body
+
+    try {
+        const result = await prisma.reuniao.create({
+            data: {
+                "title": reuniao.title,
+                "duracao": reuniao.duracao,
+                "date_realizacao": reuniao.date_realizacao,
+                "tempo_inicio": reuniao.tempo_inicio,
+                "tempo_final": reuniao.tempo_final,
+                "estado_reuniao" : reuniao.estado_reuniao,
+                "prioridade_reuniao" :{ connect: { pk_prioridade: reuniao.pk_prioridade } },
+                "participante": {create : participante}
+            }
+        });
+        
+        console.log(result);
+        res.send(result)
+    } catch (e:any) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            // The .code property can be accessed in a type-safe manner
+            if (e.code === 'P2002') {
+                console.log(
+                    'There is a unique constraint violation, a new user cannot be created with this email'
+                )
+            }
+        }
+        throw e
+    }
+
+
+
+});
 // post do listar usuario
 app.post('/listarUsuario', async (req: any, res: any) => {
     console.log("estou dentro");
@@ -266,12 +305,6 @@ app.post('/login', async (req, res) => {
         const result = await prisma.usuario.findUnique({
             where: {
                 email: email,
-            },
-
-            select: {
-                perfil: true,
-                password: true,
-                name: true
             }
         });
 

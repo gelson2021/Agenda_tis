@@ -41,6 +41,24 @@
         "DOWN":"disconectarBD"
 
      }
-
+     {
+        "reuniao": {
+            "title": "reuniao.title",
+            "duracao": 2,
+            "date_realizacao": "12/12/2001",
+            "tempo_inicio": "reuniao.tempo_inicio",
+            "tempo_final": "reuniao.tempo_final",
+            "estado_reuniao": "reuniao.estado_reuniao",
+            "prioridade_reuniao": 1
+        },
+        "participante": [
+            {
+                "fk_usuario": 1
+            },
+            {
+                "fk_usuario": 2
+            }
+        ]
+    }
 
  }
