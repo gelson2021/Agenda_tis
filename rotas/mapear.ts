@@ -16,9 +16,13 @@ prisma.$use(async (params: any, next: any) => {
 })
 
 // padroes da  palavra-passe
+/*
+O método de requisição HTTP PUT cria um novo recurso ou subsititui uma representação do recurso de destino com os novos dados.
 
+A diferença entre PUT e POST é que PUT é idempotente: chamá-lo uma ou várias vezes sucessivamente terá o mesmo efeito 
+(não é um efeito colateral), enquanto usar POST repetidamente pode ter efeitos adicionais, como passar uma ordem várias vezes.*/
 // post Alterar palavra-passe
-app.post('/alteraPasse', async (req: any, res: any) => {
+app.put('/alteraPasse', async (req: any, res: any) => {
     console.log("estou dentro");
     console.clear();
 
@@ -29,7 +33,7 @@ app.post('/alteraPasse', async (req: any, res: any) => {
                 "password": req.body.password,
             }
         });
-    } catch (e) {
+    } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             // The .code property can be accessed in a type-safe manner
             if (e.code === 'P2002') {
@@ -43,13 +47,7 @@ app.post('/alteraPasse', async (req: any, res: any) => {
 });
 
 
-/*
-function organizarDados(dados:any){
-    
-  const dado=// caso não quer difinir!= null ? dados.funcao: undefined ,}
 
-    return dado;
-}*/
 
 // post do registrar usuario
 app.post('/cadastrarDados', async (req: any, res: any) => {
@@ -70,13 +68,11 @@ app.post('/cadastrarDados', async (req: any, res: any) => {
                     }, 
                 }*/
             }
-
-
         });
 
         console.log(result);
         res.send(result)
-    } catch (e) {
+    } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             // The .code property can be accessed in a type-safe manner
             if (e.code === 'P2002') {
@@ -104,7 +100,7 @@ app.post('/listarUsuario', async (req: any, res: any) => {
 
         console.log(result);
         res.send(result)
-    } catch (e) {
+    } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             // The .code property can be accessed in a type-safe manner
             if (e.code === 'P2002') {
@@ -143,7 +139,7 @@ app.post('/funcao', async (req, res) => {
             }
         });
         res.send(result.toString + " resultado------------------------");
-    } catch (e) {
+    } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             // The .code property can be accessed in a type-safe manner
             if (e.code === 'P2002') {
@@ -170,7 +166,7 @@ app.post('/listarFuncao', async (req, res) => {
         });
         res.send(result);
 
-    } catch (e) {
+    } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             // The .code property can be accessed in a type-safe manner
             if (e.code === 'P2002') {
@@ -197,7 +193,7 @@ app.post('/departamento', async (req, res) => {
 
         res.send(result.toString + " resultado------------------------");
 
-    } catch (e) {
+    } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             // The .code property can be accessed in a type-safe manner
             if (e.code === 'P2002') {
@@ -231,23 +227,25 @@ app.post('/login', async (req, res) => {
 
 
         if (result != null) {
-            if (result.password = password)
+            if (result.password == password)
                 res.send(result)
             else
                 res.send("senha errada")
 
         }
-        else res.send("Usuario não");
+        else res.send("Usuario não encontrado");
 
 
-    } catch (e) {
+    } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             // The .code property can be accessed in a type-safe manner
             if (e.code === 'P2002') {
                 console.log(
                     'There is a unique constraint violation, a new user cannot be created with this email'
                 )
-            }
+            }else
+            console.log(" erro "+e);
+            
         }
         throw e
     }
@@ -257,21 +255,30 @@ app.post('/login', async (req, res) => {
     //(result.includes(1 )? res.send(result.toString + " resultado-------- USER -----------") : res.send(result.toString + " resultado------ Admin -------------")
 });
 
-const port = process.env.PORT || 3000;
-/*
-app.post('/loginDados', async (req, res) => {
-    main(){
-  .then(async () => {
-    await prisma.$disconnect()
-})
-        .catch(async (e) => {
-            console.error(e)
-            await prisma.$disconnect()
-            process.exit(1)
-        })
+
+app.post('/disconectarBD', async (req, res) => {
+
+    try
+        {await prisma.$disconnect();}
+     catch (e:any) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            // The .code property can be accessed in a type-safe manner
+            if (e.code === 'P2002') {
+                console.log(
+                    'There is a unique constraint violation, a new user cannot be created with this email'
+                )
+                await prisma.$disconnect();
+            }
+        }
+        throw e
     }
 });
-*/
+
+
+const port = process.env.PORT || 3000;
+
+
+
 app.listen(port, () => {
     console.log(`Listening to requests on port http://localhost:${port}`);
 });

@@ -18,12 +18,18 @@
   "dependencies": {
     "@prisma/client": "^4.1.1",
     "body-parser": "^1.20.0",
-    "express": "^4.18.1",
-    "express-session": "^1.17.3",
-    "express-validator": "^6.14.2"
+    "express": "^4.18.1"
   },
   "prisma": {
     "seed": "ts-node rotas/mapear.ts"
   },
-  "description": ""
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gelson2021/Agenda_tis.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gelson2021/Agenda_tis/issues"
+  },
+  "homepage": "https://github.com/gelson2021/Agenda_tis#readme"
 }
