@@ -38,7 +38,9 @@
         "LF":"listarFuncao",
         "D":"departamento",
         "L":"login",
-        "DOWN":"disconectarBD"
+        "DOWN":"disconectarBD",
+        "LR": "listarReuniao",
+        "CR": "cadastrarReuniao"
 
      },
      "reunião": {

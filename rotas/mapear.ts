@@ -86,7 +86,7 @@ app.post('/cadastrarUsuario', async (req: any, res: any) => {
 
 
 
-// post do registrar usuario
+// post do registrar reunião
 app.post('/cadastrarReuniao', async (req: any, res: any) => {
     console.log("estou dentro");
     console.clear();
@@ -109,18 +109,17 @@ app.post('/cadastrarReuniao', async (req: any, res: any) => {
             console.log(result.pk_reuniao+" e "+participante)
 
 
-        var resultpasr:any;
-        participante.forEach( async (element:any) => {
-            resultpasr = await prisma.participante.create({
+        var resultpasr:any[];
+        participante.forEach( async (element:any, i:number) => {
+            resultpasr[i] = await prisma.participante.create({
                 data:{ fk_usuario: element.pk_usuario,
                         fk_reuniao: result.pk_reuniao
                 }
             })
         });
 
-       
         
-        console.log(resultpasr);
+        //console.log(resultpasr);
         res.send(result)
     } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -137,6 +136,40 @@ app.post('/cadastrarReuniao', async (req: any, res: any) => {
 
 
 });
+
+
+// listar reunião
+app.post('/listarReuniao', async (req: any, res: any) => {
+    console.log("estou dentro");
+    console.clear();
+    const { reuniao, participante} = req.body
+
+    try {
+        const result = await prisma.reuniao.findMany({
+            
+            include:{participante :true}
+         
+        });
+        console.log(result);
+        
+        res.send(result)
+    } catch (e:any) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            // The .code property can be accessed in a type-safe manner
+            if (e.code === 'P2002') {
+                console.log(
+                    'There is a unique constraint violation, a new user cannot be created with this email'
+                )
+            }
+        }
+        throw e
+    }
+
+
+
+});
+
+
 // post do listar usuario
 app.post('/listarUsuario', async (req: any, res: any) => {
     console.log("estou dentro");
