@@ -52,17 +52,18 @@ app.put('/alteraPasse', async (req: any, res: any) => {
 
 // post do registrar usuario
 app.post('/cadastrarUsuario', async (req: any, res: any) => {
+    const { email, name , password , perfil,funcao } = req.body;
     console.log("estou dentro");
     console.clear();
 
     try {
         const result = await prisma.usuario.create({
             data: {
-                "email": req.body.email,
-                "name": req.body.name,
-                "password": req.body.password,
-                "perfil": req.body.perfil,
-                "funcao": { connect: { pk_funcao: req.body.funcao } }
+                "email": email,
+                "name": name,
+                "password": password,
+                "perfil": perfil == null ? "USER": perfil,
+                "funcao": { connect: { pk_funcao: funcao } }
             }
         });
 
@@ -349,13 +350,16 @@ app.post('/listarPrioridade', async (req, res) => {
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const result = await prisma.usuario.findUnique({
+        const result = await prisma.usuario.findMany({
             where: {
-                email: email,
+                AND :{email: email, 
+                    password:password
+                }
+                
             }
         });
 
-
+        /*
         if (result != null) {
             if (result.password == password)
                 res.send(result)
@@ -364,7 +368,8 @@ app.post('/login', async (req, res) => {
 
         }
         else res.send("Usuario não encontrado");
-
+        */
+        res.send(result)
 
     } catch (e:any) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
